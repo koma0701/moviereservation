@@ -1,6 +1,6 @@
-  <?php
-    require_once 'classes/Movie.php';
+<?php
     include('header.php');
+    require_once 'classes/Movie.php';
     $mov = new Movie();
     $row = $mov->getMovieData();
   ?>
@@ -20,13 +20,13 @@
 </head>
     <body>
     <h2 class="display-4 text-center my-5">Owner's page</h2>
-    <h2 class="w-100 text-center my-5">Now Playing</h2>
+    <h2 class="w-100 text-center my-5">Previous Movie</h2>
     <div class="row">
       <div class="col-6">
          <h2 class="text-center mb-5"><a href="addmovie.php" class="text-dark border p-2">Add Movie</a></h2>
       </div>
       <div class="col-6">
-          <h2 class="text-center mb-5"><a href="previousMovie.php" class="text-dark border p-2">Previous Movie</a></h2>
+          <h2 class="text-center mb-5"><a href="nowplaying.php" class="text-dark border p-2">Now Playing</a></h2>
       </div>
     </div>
     <table class="table table table-striped container mb-5">
@@ -36,21 +36,21 @@
                 <th>Summary</th>
                 <th>Capacity</th>
                 <th>Price</th>
-                <th>Update</th>
+                <!-- <th>Update</th>
                 <th>Delete</th>
                 <th>Schedule</th>
-                <th>Archive</th>
+                <th>Archive</th> -->
             </thead>
         <?php
-          $total = 0;
-          foreach($row as $result) {
-            $id = $result['movie_id'];
-            $pic = $result['movie_picture'];
-            $mname = $result['movie_name'];
-            $row2 = $mov->getReviewData($id);
+            $total = 0;
+              foreach($row as $result) {
+                $id = $result['movie_id'];
+                $pic = $result['movie_picture'];
+                $mname = $result['movie_name'];
+                $row2 = $mov->getReviewData($id);
             
-            $ratesum = 0;
-            $ratecount = 0;
+                $ratesum = 0;
+                $ratecount = 0;
                 foreach($row2 as $result2) {
                   $ratesum = $ratesum + $result2['review_rating'];
                   $ratecount = $ratecount + 1;
@@ -60,20 +60,19 @@
                 }else{
                   $rateaverage = $ratesum / $ratecount;
                 }
-                if($result['movie_status'] != 'O'){
+                if($result['movie_status'] == 'O'){
                   echo "<form action='action.php' method='post'>";
                   echo "<tr class='border'>";
-                  echo "<td> <img src='img/" . $result['movie_picture']. "' class='' style='width: 100%'>
-                  </td>";
+                  echo "<td> <img src='img/" . $result['movie_picture']. "' class='' style='width: 50%'> </td>";
                   echo "<td class='border'><a href='movieReport.php?id=$id' class='btn border'>" . $result['movie_name'] . "</a><a href='readReviewMovie.php?picture=$pic&mname=$mname&id=$id' class='btn border mt-2'><p class='text-center mt-2'>" . "Rating " .number_format($rateaverage, 1) . "</p></a></td>";
                   echo "<td class='border'>" . $result['movie_summary'] . "</td>";
                   echo "<td class='border'>" . $result['movie_cap'] . "</td>";
                   echo "<td class='border'>" . number_format($result['movie_price'], 2)  . "</td>";
-                  echo "<td> <a href='updateMovie.php?id=$id' class='btn btn-primary'>update</a> </td>";
-                  echo "<td> <a href='action.php?actiontype=delete&id=$id' class='btn btn-danger'>Delete</a> </td>";
+                  // echo "<td> <a href='updateMovie.php?id=$id' class='btn btn-primary'>update</a> </td>";
+                  // echo "<td> <a href='action.php?actiontype=delete&id=$id' class='btn btn-danger'>Delete</a> </td>";
                   
-                  echo "<td> <a href='addMovieSchedule.php?id=$id' class='btn btn-info'>Add Schedule</a> </td>";
-                  echo "<td class=''><a href='action.php?actiontype=status&id=$id' class='btn btn-dark'>Change Status</a></td>";
+                  // echo "<td> <a href='addMovieSchedule.php?id=$id' class='btn btn-info'>Add Schedule</a> </td>";
+                  // echo "<td class=''><a href='action.php?actiontype=status&id=$id' class='btn btn-dark'>Change Status</a></td>";
                   echo "</tr>";
                   echo "</form>";
                   $rows = $mov->getReservationID($id);
@@ -85,9 +84,8 @@
                   }
                 }
               }
-               
               echo "<p class='text-right display-4 text-danger' style='font-size: 40px;margin-right: 150px;'>" .'Total Sales:  '.number_format($total, 2) ."</p>";
-                        
+                               
         ?>
     </table>
 
